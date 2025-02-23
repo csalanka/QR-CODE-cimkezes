@@ -3,37 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Kód Generáló</title>
+    <title>QR Kód Címke Generálás</title>
     <style>
-        /* Címke felület */
-        #label {
-            width: 300px; /* Címke szélessége */
-            height: 100px; /* Címke magassága */
-            border: 2px solid black; /* Címke szegély */
-            padding: 10px;
-            text-align: center;
+        .label-container {
+            display: flex;
+            width: 30mm; /* Címke szélesség */
+            height: 60mm; /* Címke magasság */
+            border: 1px solid #000; /* Címke keret */
+            padding: 5mm;
             font-family: Arial, sans-serif;
         }
 
-        /* Szám vastagon */
-        #text-display {
-            font-size: 24px; /* Méret a számnak */
-            font-weight: bold; /* Vastag szöveg */
+        .qrcode {
+            width: 40%; /* QR kód bal oldalon */
+            height: auto;
+            margin-right: 10mm;
+        }
+
+        .text-content {
+            width: 60%; /* Szöveg jobb oldalon */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .number {
+            font-weight: bold;
+            font-size: 18pt;
+        }
+
+        .text {
+            font-size: 12pt;
+            word-wrap: break-word;
         }
     </style>
 </head>
 <body>
-    <h1>QR Kód Generáló</h1>
+    <h1>QR Kód Címke Generálás</h1>
     <label for="text-input">Szöveg:</label>
     <input type="text" id="text-input" placeholder="Írd be a szöveget" maxlength="60">
     <button onclick="generateQRCode()">QR Kód Generálás</button>
     <br><br>
-    <canvas id="qrcode"></canvas>
-    <br><br>
-    
-    <!-- Címke felület -->
-    <div id="label">
-        <div id="text-display"></div> <!-- Itt jelenik meg a szám vastagon -->
+    <div class="label-container">
+        <canvas id="qrcode" class="qrcode"></canvas>
+        <div class="text-content">
+            <div id="number" class="number"></div>
+            <div id="text" class="text"></div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
@@ -60,9 +76,13 @@
                 }
             });
 
-            // A szám vastagon megjelenítése
-            var number = text.split(" ")[0]; // Első szó (szám)
-            document.getElementById("text-display").textContent = number; // Csak a szám jelenik meg
+            // Szöveg kezelése
+            var number = text.split(' ')[0]; // Az első szám a szövegből
+            var textWithoutNumber = text.substring(number.length).trim(); // A szám utáni szöveg
+
+            // Megjelenítés a címkén
+            document.getElementById("number").textContent = number;
+            document.getElementById("text").textContent = textWithoutNumber;
         }
     </script>
 </body>
