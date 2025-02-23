@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Kód Címke Generáló</title>
+    <title>QR Címkenyomtatás</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <style>
         .cimke {
             width: 60mm;
             height: 30mm;
-            padding: 5mm;
+            padding: 3mm;
             border: 1px solid black;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center; /* Középre igazítás függőlegesen */
             font-family: Arial, sans-serif;
             font-size: 10px;
+            position: relative;
+        }
+
+        .qr-container {
+            width: 25mm; /* QR kód mérete */
+            height: 25mm;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: -3mm; /* Picit balra tolás */
         }
 
         .szoveg {
@@ -22,19 +33,6 @@
             text-align: left;
             line-height: 1.5;
             padding-left: 5mm;
-        }
-
-        .qr-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 30mm; /* QR kód területe a címkén belül */
-            height: 30mm;
-        }
-
-        canvas {
-            width: 100%;
-            height: 100%;
         }
 
         .szam {
@@ -45,32 +43,41 @@
     </style>
 </head>
 <body>
-    <h1>QR Kód Címke Generáló</h1>
-    <label for="text-input">Szöveg:</label>
-    <input type="text" id="text-input" placeholder="Írd be a szöveget (pl. 7004564 Text)">
+
+    <h1>QR Kódos Címke Generálás</h1>
+    <label for="text-input">Szöveg (szám + leírás):</label>
+    <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás">
     <button onclick="generateQRCode()">QR Kód Generálás</button>
     <br><br>
+
+    <!-- Címke megjelenítése -->
     <div class="cimke">
         <div class="qr-container">
             <canvas id="qrcode"></canvas>
         </div>
-        <div class="szoveg">
-            <div class="szam" id="szam">7004564</div>
-            <div id="generated-text">Text szöveg.</div>
+        <div class="szoveg-container">
+            <div id="szam" class="szam"></div>
+            <div id="szoveg" class="szoveg"></div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <script>
         function generateQRCode() {
             var text = document.getElementById("text-input").value;
-            var numberPart = text.split(" ")[0]; // Az első számot kiemeljük
-            var textPart = text.slice(numberPart.length).trim(); // A többi szöveget eltároljuk
 
             if (!text) {
                 alert("Kérlek, írj be valamilyen szöveget!");
                 return;
             }
+
+            // Első szó (szám) és a többi különválasztása
+            var parts = text.split(" ");
+            var numberPart = parts.shift(); // Első szó (szám)
+            var textPart = parts.join(" "); // A maradék szöveg
+
+            // Beállítás a címkén
+            document.getElementById("szam").textContent = numberPart;
+            document.getElementById("szoveg").textContent = textPart;
 
             // QR-kód generálása
             QRCode.toCanvas(document.getElementById("qrcode"), text, function(error) {
@@ -81,11 +88,8 @@
                     console.log("QR kód generálva!");
                 }
             });
-
-            // A szöveg és szám frissítése a címkén
-            document.getElementById("szam").textContent = numberPart;
-            document.getElementById("generated-text").textContent = textPart;
         }
     </script>
+
 </body>
 </html>
