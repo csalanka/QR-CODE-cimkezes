@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Kód Generáló</title>
+</head>
+<body>
+    <h1>QR Kód Generáló</h1>
+    <label for="text-input">Szöveg:</label>
+    <input type="text" id="text-input" placeholder="Írd be a szöveget">
+    <button onclick="generateQRCode()">QR Kód Generálás</button>
+    <br><br>
+    <canvas id="qrcode"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script>
+        function generateQRCode() {
+            var text = document.getElementById("text-input").value;
+
+            if (!text) {
+                alert("Kérlek, írj be valamilyen szöveget!");
+                return;
+            }
+
+            // URL-enkódolás
+            var encodedText = encodeURIComponent(text);
+            console.log("Encoded text:", encodedText); // Segítség a hibakereséshez
+
+            // QR-kód generálása
+            QRCode.toCanvas(document.getElementById("qrcode"), encodedText, function(error) {
+                if (error) {
+                    console.error("QR Kód generálási hiba:", error);
+                    alert("Hiba történt a QR-kód generálása közben.");
+                } else {
+                    console.log("QR kód generálva!");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
