@@ -3,52 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Kód Címke Generálás</title>
+    <title>QR Kód Címke Generáló</title>
     <style>
-        .label-container {
-            display: flex;
-            width: 30mm; /* Címke szélesség */
-            height: 60mm; /* Címke magasság */
-            border: 1px solid #000; /* Címke keret */
+        .cimke {
+            width: 60mm;
+            height: 30mm;
             padding: 5mm;
-            font-family: Arial, sans-serif;
-        }
-
-        .qrcode {
-            width: 40%; /* QR kód bal oldalon */
-            height: auto;
-            margin-right: 10mm;
-        }
-
-        .text-content {
-            width: 60%; /* Szöveg jobb oldalon */
+            border: 1px solid black;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+        }
+
+        .szoveg {
+            max-width: 70%;
+            text-align: left;
+            line-height: 1.5;
+            padding-left: 5mm;
+        }
+
+        .qr-container {
+            display: flex;
             justify-content: center;
+            align-items: center;
         }
 
-        .number {
+        canvas {
+            width: 30mm;
+            height: 30mm;
+        }
+
+        .szam {
             font-weight: bold;
-            font-size: 18pt;
-        }
-
-        .text {
-            font-size: 12pt;
-            word-wrap: break-word;
+            font-size: 14px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
-    <h1>QR Kód Címke Generálás</h1>
+    <h1>QR Kód Címke Generáló</h1>
     <label for="text-input">Szöveg:</label>
-    <input type="text" id="text-input" placeholder="Írd be a szöveget" maxlength="60">
+    <input type="text" id="text-input" placeholder="Írd be a szöveget (pl. 7004564 Text)">
     <button onclick="generateQRCode()">QR Kód Generálás</button>
     <br><br>
-    <div class="label-container">
-        <canvas id="qrcode" class="qrcode"></canvas>
-        <div class="text-content">
-            <div id="number" class="number"></div>
-            <div id="text" class="text"></div>
+    <div class="cimke">
+        <div class="qr-container">
+            <canvas id="qrcode"></canvas>
+        </div>
+        <div class="szoveg">
+            <div class="szam" id="szam">7004564</div>
+            <div id="generated-text">Text szöveg.</div>
         </div>
     </div>
 
@@ -56,18 +62,16 @@
     <script>
         function generateQRCode() {
             var text = document.getElementById("text-input").value;
+            var numberPart = text.split(" ")[0]; // Az első számot kiemeljük
+            var textPart = text.slice(numberPart.length).trim(); // A többi szöveget eltároljuk
 
             if (!text) {
                 alert("Kérlek, írj be valamilyen szöveget!");
                 return;
             }
 
-            // URL-enkódolás
-            var encodedText = encodeURIComponent(text);
-            console.log("Encoded text:", encodedText); // Segítség a hibakereséshez
-
             // QR-kód generálása
-            QRCode.toCanvas(document.getElementById("qrcode"), encodedText, function(error) {
+            QRCode.toCanvas(document.getElementById("qrcode"), text, function(error) {
                 if (error) {
                     console.error("QR Kód generálási hiba:", error);
                     alert("Hiba történt a QR-kód generálása közben.");
@@ -76,13 +80,9 @@
                 }
             });
 
-            // Szöveg kezelése
-            var number = text.split(' ')[0]; // Az első szám a szövegből
-            var textWithoutNumber = text.substring(number.length).trim(); // A szám utáni szöveg
-
-            // Megjelenítés a címkén
-            document.getElementById("number").textContent = number;
-            document.getElementById("text").textContent = textWithoutNumber;
+            // A szöveg és szám frissítése a címkén
+            document.getElementById("szam").textContent = numberPart;
+            document.getElementById("generated-text").textContent = textPart;
         }
     </script>
 </body>
