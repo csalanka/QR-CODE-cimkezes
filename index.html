@@ -12,7 +12,9 @@
     <button onclick="generateQRCode()">QR Kód Generálás</button>
     <br><br>
     <canvas id="qrcode"></canvas>
-
+    <br>
+    <div id="text-display"></div> <!-- Itt jelenítjük meg a beírt szöveget -->
+    
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
     <script>
         function generateQRCode() {
@@ -36,6 +38,9 @@
                     console.log("QR kód generálva!");
                 }
             });
+
+            // A beírt szöveg megjelenítése a címkén
+            document.getElementById("text-display").textContent = "Beírt szöveg: " + text;
         }
     </script>
 </body>
