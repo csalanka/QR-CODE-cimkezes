@@ -1,224 +1,235 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Adatbázis Címkekezelő</title>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f0f0f0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Adatbázis Címkekezelő</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f0f0f0;
+    }
 
-        nav {
-            margin-bottom: 20px;
-            background-color: #007BFF;
-            padding: 10px;
-            border-radius: 5px;
-        }
+    nav {
+      margin-bottom: 20px;
+      background-color: #007BFF;
+      padding: 10px;
+      border-radius: 5px;
+    }
 
-        .nav-link {
-            margin-right: 15px;
-            cursor: pointer;
-            text-decoration: underline;
-            color: white;
-        }
+    .nav-link {
+      margin-right: 15px;
+      cursor: pointer;
+      text-decoration: underline;
+      color: white;
+    }
 
-        .nav-link:hover {
-            color: #f0f0f0;
-        }
+    .nav-link:hover {
+      color: #f0f0f0;
+    }
 
-        .lap-content {
-            display: none;
-        }
+    .lap-content {
+      display: none;
+    }
 
-        .active {
-            display: block;
-        }
+    .active {
+      display: block;
+    }
 
-        /* QR kód és címke stílus */
-        .cimke {
-            width: 60mm;
-            height: 30mm;
-            padding: 3mm;
-            border: 1px solid black;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            font-size: 10px;
-            position: relative;
-            background-color: #ffffff;
-        }
+    /* QR kód és címke stílus */
+    .cimke {
+      width: 60mm;
+      height: 30mm;
+      padding: 3mm;
+      border: 1px solid black;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      position: relative;
+      background-color: #ffffff;
+    }
 
-        .qr-container {
-            width: 25mm;
-            height: 25mm;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: -3mm;
-            background-color: #f8f9fa;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+    .qr-container {
+      width: 25mm;
+      height: 25mm;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: -3mm;
+      background-color: #f8f9fa;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
-        .szoveg-container {
-            max-width: 60%;
-            text-align: left;
-            line-height: 1.5;
-            padding-left: 5mm;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding-right: 5mm;
-        }
+    .szoveg-container {
+      max-width: 60%;
+      text-align: left;
+      line-height: 1.5;
+      padding-left: 5mm;
+      padding-right: 5mm;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-        .szam {
-            font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
+    .szam {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
 
-        /* Címke olvasás (Foglalás) és Foglalási lista stílus */
-        .input-group {
-            margin-bottom: 10px;
-        }
+    /* Címke olvasás (Foglalás) és Foglalási lista stílus */
+    .input-group {
+      margin-bottom: 10px;
+    }
 
-        .help-text {
-            font-size: 12px;
-            color: gray;
-        }
+    .help-text {
+      font-size: 12px;
+      color: gray;
+    }
 
-        /* Segítség lap stílus */
-        .help-text {
-            color: #007BFF;
-        }
+    /* Segítség lap stílus */
+    .help-text {
+      color: #007BFF;
+    }
 
-        /* Helyi stílus a navigációs menühez */
-        h1 {
-            color: #007BFF;
-        }
+    /* Helyi stílus a navigációs menühez */
+    h1 {
+      color: #007BFF;
+    }
 
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
 
-        button:hover {
-            background-color: #0056b3;
-        }
+    button:hover {
+      background-color: #0056b3;
+    }
 
-        input[type="text"] {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
+    input[type="text"] {
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>AI Adatbázis Címkekezelő</h1>
+  <h1>AI Adatbázis Címkekezelő</h1>
 
-    <!-- Navigációs menü -->
-    <nav>
-        <span class="nav-link" onclick="showLap(1)">QR Kód Generálás</span>
-        <span class="nav-link" onclick="showLap(2)">Címke Olvasás (Foglalás)</span>
-        <span class="nav-link" onclick="showLap(3)">Foglalási Lista</span>
-        <span class="nav-link" onclick="showLap(4)">Segítség</span>
-    </nav>
+  <!-- Navigációs menü -->
+  <nav>
+    <span class="nav-link" onclick="showLap(1)">QR Kód Generálás</span>
+    <span class="nav-link" onclick="showLap(2)">Címke Olvasás (Foglalás)</span>
+    <span class="nav-link" onclick="showLap(3)">Foglalási Lista</span>
+    <span class="nav-link" onclick="showLap(4)">Segítség</span>
+  </nav>
 
-    <!-- Lapok -->
-    <div id="lap1" class="lap-content active">
-        <h2>QR Kód Generálás</h2>
-        <label for="text-input">Szöveg (Anyagszám + leírás):</label>
-        <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás" maxlength="60">
-        <button onclick="generateQRCode()">QR Kód Generálás</button>
-        <br><br>
-        <div class="cimke">
-            <div class="qr-container">
-                <canvas id="qrcode"></canvas>
-            </div>
-            <div class="szoveg-container">
-                <div id="szam" class="szam"></div>
-                <div id="szoveg" class="szoveg"></div>
-            </div>
-        </div>
+  <!-- Lapok -->
+  <div id="lap1" class="lap-content active">
+    <h2>QR Kód Generálás</h2>
+    <label for="text-input">Szöveg (Anyagszám + leírás):</label>
+    <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás" maxlength="60">
+    <div id="char-count" style="margin-top:10px;">Még <span id="remaining-chars">60</span> karakter maradt.</div>
+    <button onclick="generateQRCode()">QR Kód Generálás</button>
+    <br><br>
+    <div class="cimke">
+      <div class="qr-container">
+        <canvas id="qrcode"></canvas>
+      </div>
+      <div class="szoveg-container">
+        <div id="szam" class="szam"></div>
+        <div id="szoveg" class="szoveg"></div>
+      </div>
     </div>
+  </div>
 
-    <div id="lap2" class="lap-content">
-        <h2>Címke Olvasás (Foglalás)</h2>
-        <div class="input-group">
-            <label for="cimke-input">Címke beolvasása:</label>
-            <input type="text" id="cimke-input" placeholder="Beolvasott címke adatok">
-        </div>
-        <button onclick="processFoglalas()">Foglalás végrehajtása</button>
-        <div id="cimke-result" class="help-text"></div>
+  <div id="lap2" class="lap-content">
+    <h2>Címke Olvasás (Foglalás)</h2>
+    <div class="input-group">
+      <label for="cimke-input">Címke beolvasása:</label>
+      <input type="text" id="cimke-input" placeholder="Beolvasott címke adatok">
     </div>
+    <button onclick="processFoglalas()">Foglalás végrehajtása</button>
+    <div id="cimke-result" class="help-text"></div>
+  </div>
 
-    <div id="lap3" class="lap-content">
-        <h2>Foglalási Lista</h2>
-        <p id="foglalas-lista">Nincs foglalás.</p>
-    </div>
+  <div id="lap3" class="lap-content">
+    <h2>Foglalási Lista</h2>
+    <p id="foglalas-lista">Nincs foglalás.</p>
+  </div>
 
-    <div id="lap4" class="lap-content">
-        <h2>Segítség</h2>
-        <p>A program különböző funkciók használatára szolgál:</p>
-        <ul>
-            <li><b>QR Kód Generálás:</b> Kódot generál az anyagszám és leírás alapján.</li>
-            <li><b>Címke Olvasás (Foglalás):</b> Beolvassa a címkét és elvégzi a foglalást.</li>
-            <li><b>Foglalási Lista:</b> Megjeleníti a foglalások listáját.</li>
-        </ul>
-    </div>
+  <div id="lap4" class="lap-content">
+    <h2>Segítség</h2>
+    <p>A program különböző funkciók használatára szolgál:</p>
+    <ul>
+      <li><b>QR Kód Generálás:</b> Kódot generál az anyagszám és leírás alapján.</li>
+      <li><b>Címke Olvasás (Foglalás):</b> Beolvassa a címkét és elvégzi a foglalást.</li>
+      <li><b>Foglalási Lista:</b> Megjeleníti a foglalások listáját.</li>
+    </ul>
+  </div>
 
-    <script>
-        function showLap(lap) {
-            var lapok = document.querySelectorAll('.lap-content');
-            lapok.forEach(function(lapContent) {
-                lapContent.classList.remove('active');
-            });
-            document.getElementById('lap' + lap).classList.add('active');
+  <script>
+    // Lapváltás
+    function showLap(lap) {
+      var lapok = document.querySelectorAll('.lap-content');
+      lapok.forEach(function(lapContent) {
+        lapContent.classList.remove('active');
+      });
+      document.getElementById('lap' + lap).classList.add('active');
+    }
+
+    // Karakter számláló a szövegbevitelnél
+    document.getElementById("text-input").addEventListener("input", function() {
+      var maxChars = 60;
+      var remaining = maxChars - this.value.length;
+      document.getElementById("remaining-chars").textContent = remaining;
+    });
+
+    // QR kód generálása
+    function generateQRCode() {
+      var text = document.getElementById("text-input").value;
+      if (!text) {
+        alert("Kérlek, írj be valamilyen szöveget!");
+        return;
+      }
+      var parts = text.split(" ");
+      var numberPart = parts.shift();
+      var textPart = parts.join(" ");
+      document.getElementById("szam").textContent = numberPart;
+      document.getElementById("szoveg").textContent = textPart;
+      QRCode.toCanvas(document.getElementById("qrcode"), text, function(error) {
+        if (error) {
+          console.error("QR Kód generálási hiba:", error);
+          alert("Hiba történt a QR-kód generálása közben.");
+        } else {
+          console.log("QR kód generálva!");
         }
+      });
+    }
 
-        function generateQRCode() {
-            var text = document.getElementById("text-input").value;
-            if (!text) {
-                alert("Kérlek, írj be valamilyen szöveget!");
-                return;
-            }
-            var parts = text.split(" ");
-            var numberPart = parts.shift();
-            var textPart = parts.join(" ");
-
-            document.getElementById("szam").textContent = numberPart;
-            document.getElementById("szoveg").textContent = textPart;
-
-            QRCode.toCanvas(document.getElementById("qrcode"), text, function(error) {
-                if (error) {
-                    console.error("QR Kód generálási hiba:", error);
-                    alert("Hiba történt a QR-kód generálása közben.");
-                } else {
-                    console.log("QR kód generálva!");
-                }
-            });
-        }
-
-        function processFoglalas() {
-            var cimkeInput = document.getElementById("cimke-input").value;
-            if (cimkeInput) {
-                document.getElementById("cimke-result").textContent = "Foglalás sikeresen végrehajtva!";
-            } else {
-                document.getElementById("cimke-result").textContent = "Kérlek, adj meg érvényes címkét!";
-            }
-        }
-    </script>
+    // Foglalás végrehajtása
+    function processFoglalas() {
+      var cimkeInput = document.getElementById("cimke-input").value;
+      if (cimkeInput) {
+        document.getElementById("cimke-result").textContent = "Foglalás sikeresen végrehajtva!";
+      } else {
+        document.getElementById("cimke-result").textContent = "Kérlek, adj meg érvényes címkét!";
+      }
+    }
+  </script>
 
 </body>
 </html>
