@@ -79,8 +79,11 @@
             document.getElementById("szam").textContent = numberPart;
             document.getElementById("szoveg").textContent = textPart;
 
-            // QR-kód generálása
-            QRCode.toCanvas(document.getElementById("qrcode"), text, function(error) {
+            // QR-kód generálása fix mérettel (150x150 px)
+            QRCode.toCanvas(document.getElementById("qrcode"), text, {
+                width: 150, // Fix szélesség
+                height: 150 // Fix magasság
+            }, function(error) {
                 if (error) {
                     console.error("QR Kód generálási hiba:", error);
                     alert("Hiba történt a QR-kód generálása közben.");
