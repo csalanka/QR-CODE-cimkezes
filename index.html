@@ -50,10 +50,21 @@
             line-height: 1.5;
         }
 
-        /* Figyelmeztető üzenet stílusa */
         .warning {
             color: red;
             font-weight: bold;
+        }
+
+        #text-input {
+            width: 100%;
+            font-size: 14px;
+            padding: 5px;
+        }
+
+        .char-counter {
+            font-size: 12px;
+            text-align: right;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -61,7 +72,8 @@
 
     <h1>QR Kódos Címke Generálás</h1>
     <label for="text-input">Szöveg (szám + leírás):</label>
-    <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás">
+    <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás" oninput="updateCharCount()">
+    <div class="char-counter" id="char-count">Karakterek hátralevő száma: 60</div>
     <button onclick="generateQRCode()">QR Kód Generálás</button>
     <br><br>
 
@@ -99,32 +111,4 @@
             var paddedText = text;
             if (paddedText.length < 60) {
                 var spacesToAdd = 60 - paddedText.length;
-                paddedText += ' '.repeat(spacesToAdd); // Kiegészítjük szóközökkel
-            }
-
-            // Első szó (szám) és a többi különválasztása
-            var parts = paddedText.split(" ");
-            var numberPart = parts.shift(); // Első szó (szám)
-            var textPart = parts.join(" "); // A maradék szöveg
-
-            // Beállítás a címkén
-            document.getElementById("szam").textContent = numberPart;
-            document.getElementById("szoveg").textContent = textPart;
-
-            // QR-kód generálása fix mérettel (150x150 px)
-            QRCode.toCanvas(document.getElementById("qrcode"), paddedText, {
-                width: 150, // Fix szélesség
-                height: 150 // Fix magasság
-            }, function(error) {
-                if (error) {
-                    console.error("QR Kód generálási hiba:", error);
-                    alert("Hiba történt a QR-kód generálása közben.");
-                } else {
-                    console.log("QR kód generálva!");
-                }
-            });
-        }
-    </script>
-
-</body>
-</html>
+                paddedText += ' '.repeat(spacesToAdd); // Kiegész
