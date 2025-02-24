@@ -8,46 +8,28 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            margin: 20px;
         }
 
-        .header {
-            background-color: #007BFF;
-            color: white;
-            padding: 15px;
-            text-align: center;
+        nav {
+            margin-bottom: 20px;
         }
 
-        .tabs {
-            display: flex;
-            justify-content: center;
-            background-color: #333;
-        }
-
-        .tab {
-            padding: 14px 20px;
+        .nav-link {
+            margin-right: 15px;
             cursor: pointer;
-            color: white;
-            text-align: center;
-            flex: 1;
-            background-color: #333;
-            border: 1px solid #444;
+            text-decoration: underline;
         }
 
-        .tab:hover {
-            background-color: #575757;
+        .lap-content {
+            display: none;
         }
 
-        .tab.active {
-            background-color: #007BFF;
+        .active {
+            display: block;
         }
 
-        .content {
-            padding: 20px;
-        }
-
+        /* QR kód és címke stílus */
         .cimke {
             width: 60mm;
             height: 30mm;
@@ -70,68 +52,49 @@
             margin-left: -3mm;
         }
 
-        .szoveg-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            padding-left: 5mm;
-        }
-
         .szoveg {
             max-width: 60%;
             text-align: left;
             line-height: 1.5;
             padding-left: 5mm;
-            text-align: center;
         }
 
         .szam {
             font-weight: bold;
             font-size: 14px;
             margin-bottom: 5px;
-            text-align: center;
         }
 
-        .input-container {
-            margin-bottom: 20px;
-        }
-
-        .input-container input {
-            width: 100%;
-            padding: 8px;
-            font-size: 16px;
+        /* Címke olvasás (Foglalás) és Foglalási lista stílus */
+        .input-group {
             margin-bottom: 10px;
         }
 
-        .message {
-            color: red;
-            margin-top: 10px;
+        .help-text {
+            font-size: 12px;
+            color: gray;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>AI Adatbázis Címkekezelő</h1>
-    </div>
+    <h1>AI Adatbázis Címkekezelő</h1>
 
-    <div class="tabs">
-        <div class="tab active" onclick="openTab(event, 'qr-code')">QR Kód Generálás</div>
-        <div class="tab" onclick="openTab(event, 'tab2')">Lap 2</div>
-        <div class="tab" onclick="openTab(event, 'tab3')">Lap 3</div>
-        <div class="tab" onclick="openTab(event, 'help')">Segítség</div>
-    </div>
+    <!-- Navigációs menü -->
+    <nav>
+        <span class="nav-link" onclick="showLap(1)">QR Kód Generálás</span>
+        <span class="nav-link" onclick="showLap(2)">Címke Olvasás (Foglalás)</span>
+        <span class="nav-link" onclick="showLap(3)">Foglalási Lista</span>
+        <span class="nav-link" onclick="showLap(4)">Segítség</span>
+    </nav>
 
-    <div class="content" id="qr-code">
-        <div class="input-container">
-            <label for="text-input">Szöveg (Anyagszám + leírás):</label>
-            <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás" maxlength="60" oninput="updateCharCount()">
-            <div id="char-count">Karakterek: 60</div>
-            <button onclick="generateQRCode()">QR Kód Generálás</button>
-            <div id="message" class="message"></div>
-        </div>
-
+    <!-- Lapok -->
+    <div id="lap1" class="lap-content active">
+        <h2>QR Kód Generálás</h2>
+        <label for="text-input">Szöveg (Anyagszám + leírás):</label>
+        <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás" maxlength="60">
+        <button onclick="generateQRCode()">QR Kód Generálás</button>
+        <br><br>
         <div class="cimke">
             <div class="qr-container">
                 <canvas id="qrcode"></canvas>
@@ -143,67 +106,53 @@
         </div>
     </div>
 
-    <div class="content" id="tab2" style="display: none;">
-        <h2>Tab 2 Tartalom</h2>
-        <p>Ez a második lap tartalma.</p>
+    <div id="lap2" class="lap-content">
+        <h2>Címke Olvasás (Foglalás)</h2>
+        <div class="input-group">
+            <label for="cimke-input">Címke beolvasása:</label>
+            <input type="text" id="cimke-input" placeholder="Beolvasott címke adatok">
+        </div>
+        <button onclick="processFoglalas()">Foglalás végrehajtása</button>
+        <div id="cimke-result" class="help-text"></div>
     </div>
 
-    <div class="content" id="tab3" style="display: none;">
-        <h2>Tab 3 Tartalom</h2>
-        <p>Ez a harmadik lap tartalma.</p>
+    <div id="lap3" class="lap-content">
+        <h2>Foglalási Lista</h2>
+        <p id="foglalas-lista">Nincs foglalás.</p>
     </div>
 
-    <div class="content" id="help" style="display: none;">
+    <div id="lap4" class="lap-content">
         <h2>Segítség</h2>
-        <p>Ez az oldal segít QR kódok generálásában.</p>
+        <p>A program különböző funkciók használatára szolgál:</p>
         <ul>
-            <li><strong>QR Kód Generálás:</strong> Itt lehet generálni a kívánt QR kódot anyagszám és leírás alapján.</li>
-            <li><strong>Lap 2:</strong> Itt adhatunk hozzá más funkciókat, pl. adatbázis-kezelés.</li>
-            <li><strong>Lap 3:</strong> Itt további kiegészítő információkat adhatunk meg.</li>
-            <li><strong>Segítség:</strong> Itt található a részletes útmutató a használathoz.</li>
+            <li><b>QR Kód Generálás:</b> Kódot generál az anyagszám és leírás alapján.</li>
+            <li><b>Címke Olvasás (Foglalás):</b> Beolvassa a címkét és elvégzi a foglalást.</li>
+            <li><b>Foglalási Lista:</b> Megjeleníti a foglalások listáját.</li>
         </ul>
     </div>
 
     <script>
-        function openTab(event, tabName) {
-            var i, content, tab;
-            content = document.getElementsByClassName("content");
-            for (i = 0; i < content.length; i++) {
-                content[i].style.display = "none";
-            }
-            tab = document.getElementsByClassName("tab");
-            for (i = 0; i < tab.length; i++) {
-                tab[i].classList.remove("active");
-            }
-            document.getElementById(tabName).style.display = "block";
-            event.currentTarget.classList.add("active");
+        function showLap(lap) {
+            var lapok = document.querySelectorAll('.lap-content');
+            lapok.forEach(function(lapContent) {
+                lapContent.classList.remove('active');
+            });
+            document.getElementById('lap' + lap).classList.add('active');
         }
 
         function generateQRCode() {
             var text = document.getElementById("text-input").value;
-
             if (!text) {
                 alert("Kérlek, írj be valamilyen szöveget!");
                 return;
             }
-
-            if (text.length > 60) {
-                document.getElementById("message").textContent = "A szöveg hossza nem haladhatja meg a 60 karaktert!";
-                return;
-            } else {
-                document.getElementById("message").textContent = "";
-            }
-
-            // Első szó (szám) és a többi különválasztása
             var parts = text.split(" ");
-            var numberPart = parts.shift(); // Első szó (szám)
-            var textPart = parts.join(" "); // A maradék szöveg
+            var numberPart = parts.shift();
+            var textPart = parts.join(" ");
 
-            // Beállítás a címkén
             document.getElementById("szam").textContent = numberPart;
             document.getElementById("szoveg").textContent = textPart;
 
-            // QR-kód generálása
             QRCode.toCanvas(document.getElementById("qrcode"), text, function(error) {
                 if (error) {
                     console.error("QR Kód generálási hiba:", error);
@@ -214,9 +163,13 @@
             });
         }
 
-        function updateCharCount() {
-            var textLength = document.getElementById("text-input").value.length;
-            document.getElementById("char-count").textContent = "Karakterek: " + (60 - textLength);
+        function processFoglalas() {
+            var cimkeInput = document.getElementById("cimke-input").value;
+            if (cimkeInput) {
+                document.getElementById("cimke-result").textContent = "Foglalás sikeresen végrehajtva!";
+            } else {
+                document.getElementById("cimke-result").textContent = "Kérlek, adj meg érvényes címkét!";
+            }
         }
     </script>
 
