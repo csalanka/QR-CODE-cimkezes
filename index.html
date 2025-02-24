@@ -1,104 +1,239 @@
-import qrcode
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Adatbázis Címkekezelő</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
 
-# 1. QR Kód Generálás
-def generate_qr_code(text):
-    # QR kód generálása
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
-    qr.add_data(text)
-    qr.make(fit=True)
+        nav {
+            margin-bottom: 20px;
+            background-color: #007BFF;
+            padding: 10px;
+            border-radius: 5px;
+        }
 
-    # QR kód képfájl mentése
-    img = qr.make_image(fill='black', back_color='white')
-    img.save("qr_code.png")
-    print("QR kód generálva és mentve: qr_code.png")
+        .nav-link {
+            margin-right: 15px;
+            cursor: pointer;
+            text-decoration: underline;
+            color: white;
+        }
 
-# 2. Címke Olvasás (Foglalás)
-import cv2
+        .nav-link:hover {
+            color: #f0f0f0;
+        }
 
-def read_qr_code(image_path):
-    # QR kód beolvasása
-    img = cv2.imread(image_path)
-    detector = cv2.QRCodeDetector()
-    value, pts, qr_code = detector(img)
-    
-    if value:
-        print("Beolvasott QR kód adat: ", value)
-        return value
-    else:
-        print("QR kód nem található!")
-        return None
+        .lap-content {
+            display: none;
+        }
 
-# 3. Foglalási Lista
-class Reservation:
-    def __init__(self, code, description):
-        self.code = code
-        self.description = description
-        self.status = "Pending"
+        .active {
+            display: block;
+        }
 
-    def __str__(self):
-        return f"Foglalás: {self.code}, Leírás: {self.description}, Státusz: {self.status}"
+        /* QR kód és címke stílus */
+        .cimke {
+            width: 60mm;
+            height: 30mm;
+            padding: 3mm;
+            border: 1px solid black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            position: relative;
+            background-color: #ffffff;
+        }
 
-reservations = []
+        .qr-container {
+            width: 25mm;
+            height: 25mm;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: -3mm;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-def add_reservation(code, description):
-    reservation = Reservation(code, description)
-    reservations.append(reservation)
-    print("Foglalás hozzáadva: ", reservation)
+        .szoveg {
+            max-width: 60%;
+            text-align: left;
+            line-height: 1.5;
+            padding-left: 5mm;
+            color: #333;
+        }
 
-# 4. Verzió Információ
-class VersionInfo:
-    def __init__(self, version_number, change_log):
-        self.version_number = version_number
-        self.change_log = change_log
+        .szam {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
 
-    def __str__(self):
-        return f"Verzió: {self.version_number}\nVáltozások:\n{self.change_log}"
+        /* Címke olvasás (Foglalás) és Foglalási lista stílus */
+        .input-group {
+            margin-bottom: 10px;
+        }
 
-versions = [
-    VersionInfo("1.0.0", "Első verzió"),
-    VersionInfo("1.1.0", "Hibajavítások és új funkciók"),
-]
+        .help-text {
+            font-size: 12px;
+            color: gray;
+        }
 
-def display_versions():
-    for version in versions:
-        print(version)
+        /* Segítség lap stílus */
+        .help-text {
+            color: #007BFF;
+        }
 
-# Program menü
-def menu():
-    while True:
-        print("\n1. QR Kód Generálás")
-        print("2. Címke Olvasás (Foglalás)")
-        print("3. Foglalási Lista")
-        print("4. Verzió Információ")
-        print("5. Kilépés")
+        /* Helyi stílus a navigációs menühez */
+        h1 {
+            color: #007BFF;
+        }
 
-        choice = input("Válassz egy lehetőséget: ")
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
 
-        if choice == '1':
-            text = input("Add meg az anyagszámot és leírást: ")
-            generate_qr_code(text)
-        elif choice == '2':
-            image_path = input("Add meg a QR kód képfájlt: ")
-            read_qr_code(image_path)
-        elif choice == '3':
-            if reservations:
-                for res in reservations:
-                    print(res)
-            else:
-                print("Nincs rögzített foglalás.")
-        elif choice == '4':
-            display_versions()
-        elif choice == '5':
-            print("Kilépés...")
-            break
-        else:
-            print("Érvénytelen választás!")
+        button:hover {
+            background-color: #0056b3;
+        }
 
-# Program indítása
-if __name__ == "__main__":
-    menu()
+        input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AI Adatbázis Címkekezelő</h1>
+
+    <!-- Navigációs menü -->
+    <nav>
+        <span class="nav-link" onclick="showLap(1)">QR Kód Generálás</span>
+        <span class="nav-link" onclick="showLap(2)">Címke Olvasás (Foglalás)</span>
+        <span class="nav-link" onclick="showLap(3)">Foglalási Lista</span>
+        <span class="nav-link" onclick="showLap(4)">Segítség</span>
+    </nav>
+
+    <!-- Lapok -->
+    <div id="lap1" class="lap-content active">
+        <h2>QR Kód Generálás</h2>
+        <label for="text-input">Szöveg (Anyagszám + leírás):</label>
+        <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás" maxlength="60">
+        <button onclick="generateQRCode()">QR Kód Generálás</button>
+        <br><br>
+        <div class="cimke">
+            <div class="qr-container">
+                <canvas id="qrcode"></canvas>
+            </div>
+            <div class="szoveg-container">
+                <div id="szam" class="szam"></div>
+                <div id="szoveg" class="szoveg"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="lap2" class="lap-content">
+        <h2>Címke Olvasás (Foglalás)</h2>
+        <div class="input-group">
+            <label for="cimke-input">Címke beolvasása:</label>
+            <input type="text" id="cimke-input" placeholder="Beolvasott címke adatok">
+        </div>
+        <button onclick="processFoglalas()">Foglalás végrehajtása</button>
+        <div id="cimke-result" class="help-text"></div>
+    </div>
+
+    <div id="lap3" class="lap-content">
+        <h2>Foglalási Lista</h2>
+        <ul id="foglalas-lista">Nincs foglalás.</ul>
+    </div>
+
+    <div id="lap4" class="lap-content">
+        <h2>Segítség</h2>
+        <p>A program különböző funkciók használatára szolgál:</p>
+        <ul>
+            <li><b>QR Kód Generálás:</b> Kódot generál az anyagszám és leírás alapján.</li>
+            <li><b>Címke Olvasás (Foglalás):</b> Beolvassa a címkét és elvégzi a foglalást.</li>
+            <li><b>Foglalási Lista:</b> Megjeleníti a foglalások listáját.</li>
+        </ul>
+    </div>
+
+    <script>
+        let foglalasok = [];
+
+        function showLap(lap) {
+            var lapok = document.querySelectorAll('.lap-content');
+            lapok.forEach(function(lapContent) {
+                lapContent.classList.remove('active');
+            });
+            document.getElementById('lap' + lap).classList.add('active');
+        }
+
+        function generateQRCode() {
+            var text = document.getElementById("text-input").value;
+            if (!text) {
+                alert("Kérlek, írj be valamilyen szöveget!");
+                return;
+            }
+            var parts = text.split(" ");
+            var numberPart = parts.shift();
+            var textPart = parts.join(" ");
+
+            document.getElementById("szam").textContent = numberPart;
+            document.getElementById("szoveg").textContent = textPart;
+
+            QRCode.toCanvas(document.getElementById("qrcode"), text, function(error) {
+                if (error) {
+                    console.error("QR Kód generálási hiba:", error);
+                    alert("Hiba történt a QR-kód generálása közben.");
+                } else {
+                    console.log("QR kód generálva!");
+                }
+            });
+        }
+
+        function processFoglalas() {
+            var cimkeInput = document.getElementById("cimke-input").value;
+            if (cimkeInput) {
+                foglalasok.push(cimkeInput);  // Foglalás hozzáadása
+                document.getElementById("cimke-result").textContent = "Foglalás sikeresen végrehajtva!";
+                updateFoglalasLista();
+            } else {
+                document.getElementById("cimke-result").textContent = "Kérlek, adj meg érvényes címkét!";
+            }
+        }
+
+        function updateFoglalasLista() {
+            const foglalasLista = document.getElementById("foglalas-lista");
+            foglalasLista.innerHTML = "";  // Lista ürítése
+
+            if (foglalasok.length === 0) {
+                foglalasLista.innerHTML = "Nincs foglalás.";
+            } else {
+                foglalasok.forEach(function(foglalas) {
+                    let listItem = document.createElement("li");
+                    listItem.textContent = foglalas;
+                    foglalasLista.appendChild(listItem);
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>
