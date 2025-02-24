@@ -86,8 +86,15 @@
                 document.getElementById("warning-message").textContent = ""; // Üzenet eltüntetése, ha minden rendben
             }
 
+            // Kiegészítjük a szöveget szóközökkel, hogy 60 karakteres legyen
+            var paddedText = text;
+            if (paddedText.length < 60) {
+                var spacesToAdd = 60 - paddedText.length;
+                paddedText += ' '.repeat(spacesToAdd); // Kiegészítjük szóközökkel
+            }
+
             // Első szó (szám) és a többi különválasztása
-            var parts = text.split(" ");
+            var parts = paddedText.split(" ");
             var numberPart = parts.shift(); // Első szó (szám)
             var textPart = parts.join(" "); // A maradék szöveg
 
@@ -96,7 +103,7 @@
             document.getElementById("szoveg").textContent = textPart;
 
             // QR-kód generálása fix mérettel (150x150 px)
-            QRCode.toCanvas(document.getElementById("qrcode"), text, {
+            QRCode.toCanvas(document.getElementById("qrcode"), paddedText, {
                 width: 150, // Fix szélesség
                 height: 150 // Fix magasság
             }, function(error) {
