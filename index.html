@@ -91,6 +91,12 @@
     </div>
 
     <script>
+        function updateCharCount() {
+            var inputText = document.getElementById("text-input").value;
+            var remainingChars = 60 - inputText.length;
+            document.getElementById("char-count").textContent = "Karakterek hátralevő száma: " + remainingChars;
+        }
+
         function generateQRCode() {
             var text = document.getElementById("text-input").value;
 
@@ -111,4 +117,32 @@
             var paddedText = text;
             if (paddedText.length < 60) {
                 var spacesToAdd = 60 - paddedText.length;
-                paddedText += ' '.repeat(spacesToAdd); // Kiegész
+                paddedText += ' '.repeat(spacesToAdd); // Kiegészítjük szóközökkel
+            }
+
+            // Első szó (szám) és a többi különválasztása
+            var parts = paddedText.split(" ");
+            var numberPart = parts.shift(); // Első szó (szám)
+            var textPart = parts.join(" "); // A maradék szöveg
+
+            // Beállítás a címkén
+            document.getElementById("szam").textContent = numberPart;
+            document.getElementById("szoveg").textContent = textPart;
+
+            // QR-kód generálása
+            var qrCanvas = document.getElementById("qrcode");
+
+            QRCode.toCanvas(qrCanvas, paddedText, function(error) {
+                if (error) {
+                    console.error("QR Kód generálási hiba:", error);
+                    alert("Hiba történt a QR-kód generálása közben.");
+                } else {
+                    console.log("QR kód generálva!");
+                    qrCanvas.style.display = "block"; // QR kód megjelenítése
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
