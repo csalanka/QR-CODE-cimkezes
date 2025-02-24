@@ -28,9 +28,12 @@
             margin-left: -3mm; /* Picit balra tolás */
         }
 
-        .szoveg {
+        .szoveg-container {
+            display: flex;
+            flex-direction: column; /* Vertikálisan egymás alá rendezzük */
+            align-items: center; /* Középre igazítjuk */
+            justify-content: center;
             max-width: 60%;
-            text-align: center; /* Középre igazított szöveg */
             line-height: 1.5;
             padding-left: 5mm;
         }
@@ -39,6 +42,12 @@
             font-weight: bold;
             font-size: 14px;
             margin-bottom: 5px;
+            text-align: center; /* Középre igazítás a számnál */
+        }
+
+        .szoveg {
+            text-align: center; /* Középre igazított szöveg */
+            line-height: 1.5;
         }
 
         /* Figyelmeztető üzenet stílusa */
