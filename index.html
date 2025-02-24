@@ -32,6 +32,31 @@
     .active {
       display: block;
     }
+    /* Verzió info */
+    .version-info {
+      margin-bottom: 20px;
+      background-color: #e0e0e0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    #version-history-popup {
+      display: none;
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ccc;
+      max-width: 500px;
+      margin: 20px auto;
+    }
+    #version-history-popup h3 {
+      margin-top: 0;
+    }
+    #version-history-popup ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    #version-history-popup li {
+      margin-bottom: 10px;
+    }
     /* QR kód és címke stílus */
     .cimke {
       width: 60mm;
@@ -43,7 +68,6 @@
       align-items: center;
       font-family: Arial, sans-serif;
       font-size: 10px;
-      position: relative;
       background-color: #ffffff;
     }
     .qr-container {
@@ -73,7 +97,7 @@
       font-size: 14px;
       margin-bottom: 5px;
     }
-    /* Címke olvasás (Foglalás) és Foglalási lista stílus */
+    /* Címke olvasás és Foglalási lista */
     .input-group {
       margin-bottom: 10px;
     }
@@ -81,11 +105,11 @@
       font-size: 12px;
       color: gray;
     }
-    /* Segítség lap stílus */
+    /* Segítség lap */
     .help-text {
       color: #007BFF;
     }
-    /* Helyi stílus a navigációs menühez */
+    /* Navigáció és cím */
     h1 {
       color: #007BFF;
     }
@@ -112,6 +136,21 @@
 <body>
 
   <h1>AI Adatbázis Címkekezelő</h1>
+  
+  <!-- Verzió információ és történet -->
+  <div class="version-info">
+    <p>Verzió: <span id="version-number">2.0</span></p>
+    <button onclick="showVersionHistory()">Verzió Történet</button>
+  </div>
+  <div id="version-history-popup">
+    <h3>Verzió Történet</h3>
+    <ul>
+      <li><strong>2.0</strong> – Új lapok hozzáadása (QR kód generálás, Foglalási Lista), dizájn színesítése, verzió kezelés.</li>
+      <li><strong>1.1</strong> – QR kódok testreszabása, szövegkezelés fejlesztése.</li>
+      <li><strong>1.0</strong> – Alap QR kód generálás.</li>
+    </ul>
+    <button onclick="closeVersionHistory()">Bezárás</button>
+  </div>
 
   <!-- Navigációs menü -->
   <nav>
@@ -173,6 +212,14 @@
         lapContent.classList.remove('active');
       });
       document.getElementById('lap' + lap).classList.add('active');
+    }
+
+    // Verziótörténet megjelenítése és bezárása
+    function showVersionHistory() {
+      document.getElementById("version-history-popup").style.display = "block";
+    }
+    function closeVersionHistory() {
+      document.getElementById("version-history-popup").style.display = "none";
     }
 
     // Karakter számláló a szövegbevitelnél
