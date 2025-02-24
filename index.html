@@ -9,16 +9,25 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f0f0f0;
         }
 
         nav {
             margin-bottom: 20px;
+            background-color: #007BFF;
+            padding: 10px;
+            border-radius: 5px;
         }
 
         .nav-link {
             margin-right: 15px;
             cursor: pointer;
             text-decoration: underline;
+            color: white;
+        }
+
+        .nav-link:hover {
+            color: #f0f0f0;
         }
 
         .lap-content {
@@ -41,6 +50,7 @@
             font-family: Arial, sans-serif;
             font-size: 10px;
             position: relative;
+            background-color: #ffffff;
         }
 
         .qr-container {
@@ -50,6 +60,9 @@
             justify-content: center;
             align-items: center;
             margin-left: -3mm;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
         .szoveg {
@@ -57,6 +70,7 @@
             text-align: left;
             line-height: 1.5;
             padding-left: 5mm;
+            color: #333;
         }
 
         .szam {
@@ -73,6 +87,35 @@
         .help-text {
             font-size: 12px;
             color: gray;
+        }
+
+        /* Segítség lap stílus */
+        .help-text {
+            color: #007BFF;
+        }
+
+        /* Helyi stílus a navigációs menühez */
+        h1 {
+            color: #007BFF;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
     </style>
 </head>
