@@ -120,12 +120,12 @@
         <div class="tab active" onclick="openTab(event, 'qr-code')">QR Kód Generálás</div>
         <div class="tab" onclick="openTab(event, 'tab2')">Lap 2</div>
         <div class="tab" onclick="openTab(event, 'tab3')">Lap 3</div>
-        <div class="tab" onclick="openTab(event, 'tab4')">Lap 4</div>
+        <div class="tab" onclick="openTab(event, 'help')">Segítség</div>
     </div>
 
     <div class="content" id="qr-code">
         <div class="input-container">
-            <label for="text-input">Szöveg (szám + leírás):</label>
+            <label for="text-input">Szöveg (Anyagszám + leírás):</label>
             <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás" maxlength="60" oninput="updateCharCount()">
             <div id="char-count">Karakterek: 60</div>
             <button onclick="generateQRCode()">QR Kód Generálás</button>
@@ -153,9 +153,15 @@
         <p>Ez a harmadik lap tartalma.</p>
     </div>
 
-    <div class="content" id="tab4" style="display: none;">
-        <h2>Tab 4 Tartalom</h2>
-        <p>Ez a negyedik lap tartalma.</p>
+    <div class="content" id="help" style="display: none;">
+        <h2>Segítség</h2>
+        <p>Ez az oldal segít QR kódok generálásában.</p>
+        <ul>
+            <li><strong>QR Kód Generálás:</strong> Itt lehet generálni a kívánt QR kódot anyagszám és leírás alapján.</li>
+            <li><strong>Lap 2:</strong> Itt adhatunk hozzá más funkciókat, pl. adatbázis-kezelés.</li>
+            <li><strong>Lap 3:</strong> Itt további kiegészítő információkat adhatunk meg.</li>
+            <li><strong>Segítség:</strong> Itt található a részletes útmutató a használathoz.</li>
+        </ul>
     </div>
 
     <script>
