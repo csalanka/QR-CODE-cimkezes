@@ -30,7 +30,7 @@
 
         .szoveg {
             max-width: 60%;
-            text-align: left;
+            text-align: center; /* Középre igazított szöveg */
             line-height: 1.5;
             padding-left: 5mm;
         }
@@ -39,6 +39,12 @@
             font-weight: bold;
             font-size: 14px;
             margin-bottom: 5px;
+        }
+
+        /* Figyelmeztető üzenet stílusa */
+        .warning {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -49,6 +55,8 @@
     <input type="text" id="text-input" placeholder="Pl.: 7004567 Leírás">
     <button onclick="generateQRCode()">QR Kód Generálás</button>
     <br><br>
+
+    <div id="warning-message" class="warning"></div> <!-- Figyelmeztető üzenet -->
 
     <!-- Címke megjelenítése -->
     <div class="cimke">
@@ -68,6 +76,14 @@
             if (!text) {
                 alert("Kérlek, írj be valamilyen szöveget!");
                 return;
+            }
+
+            // Ellenőrizzük, hogy a szöveg nem hosszabb, mint 60 karakter
+            if (text.length > 60) {
+                document.getElementById("warning-message").textContent = "A beírt szöveg túl hosszú. Kérlek, csökkentsd 60 karakterre!";
+                return;
+            } else {
+                document.getElementById("warning-message").textContent = ""; // Üzenet eltüntetése, ha minden rendben
             }
 
             // Első szó (szám) és a többi különválasztása
