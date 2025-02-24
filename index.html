@@ -65,15 +65,23 @@
             border-radius: 5px;
         }
 
-        .szoveg {
+        .szoveg-container {
             max-width: 35mm;
-            text-align: left;
+            text-align: center; /* Középre igazítva */
             line-height: 1.5;
             padding-left: 5mm;
             color: #333;
             word-wrap: break-word;
             overflow-wrap: break-word;
             white-space: normal;
+        }
+
+        .szoveg {
+            max-width: 60%;
+            text-align: left;
+            line-height: 1.5;
+            padding-left: 5mm;
+            color: #333;
         }
 
         .szam {
@@ -119,14 +127,12 @@
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 100%;
         }
     </style>
 </head>
 <body>
 
     <h1>AI Adatbázis Címkekezelő</h1>
-    <p>Verzió: <strong>1.0.0</strong></p>
 
     <!-- Navigációs menü -->
     <nav>
@@ -166,7 +172,7 @@
 
     <div id="lap3" class="lap-content">
         <h2>Foglalási Lista</h2>
-        <ul id="foglalas-lista">Nincs foglalás.</ul>
+        <p id="foglalas-lista">Nincs foglalás.</p>
     </div>
 
     <div id="lap4" class="lap-content">
@@ -180,8 +186,6 @@
     </div>
 
     <script>
-        let foglalasok = [];
-
         function showLap(lap) {
             var lapok = document.querySelectorAll('.lap-content');
             lapok.forEach(function(lapContent) {
@@ -192,17 +196,10 @@
 
         function generateQRCode() {
             var text = document.getElementById("text-input").value;
-
             if (!text) {
                 alert("Kérlek, írj be valamilyen szöveget!");
                 return;
             }
-
-            if (text.length > 60) {
-                alert("A szöveg túl hosszú! Max 60 karakter.");
-                return;
-            }
-
             var parts = text.split(" ");
             var numberPart = parts.shift();
             var textPart = parts.join(" ");
@@ -223,26 +220,9 @@
         function processFoglalas() {
             var cimkeInput = document.getElementById("cimke-input").value;
             if (cimkeInput) {
-                foglalasok.push(cimkeInput);  // Foglalás hozzáadása
                 document.getElementById("cimke-result").textContent = "Foglalás sikeresen végrehajtva!";
-                updateFoglalasLista();
             } else {
                 document.getElementById("cimke-result").textContent = "Kérlek, adj meg érvényes címkét!";
-            }
-        }
-
-        function updateFoglalasLista() {
-            const foglalasLista = document.getElementById("foglalas-lista");
-            foglalasLista.innerHTML = "";  // Lista ürítése
-
-            if (foglalasok.length === 0) {
-                foglalasLista.innerHTML = "Nincs foglalás.";
-            } else {
-                foglalasok.forEach(function(foglalas) {
-                    let listItem = document.createElement("li");
-                    listItem.textContent = foglalas;
-                    foglalasLista.appendChild(listItem);
-                });
             }
         }
     </script>
